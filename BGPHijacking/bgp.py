@@ -30,7 +30,7 @@ parser.add_argument('--sleep', default=3, type=int)
 args = parser.parse_args()
 
 FLAGS_rogue_as = args.rogue
-ROGUE_AS_NAME = 'R4'
+ROGUE_AS_NAME = 'R6'
 
 def log(s, col="green"):
     print(T.colored(s, col))
@@ -88,12 +88,20 @@ class SimpleTopo(Topo):
         create_router_and_hosts(2)
         create_router_and_hosts(3)
         create_router_and_hosts(4)
+        create_router_and_hosts(5)
+        create_router_and_hosts(6)
+
 
         # link the ASs - the demo scenario is a straight line with the attacker directly attached to AS1/R1
         self.addLink('R1', 'R2')
         self.addLink('R2', 'R3')
-        self.addLink('R1', 'R4')
-
+        self.addLink('R3', 'R1')
+        self.addLink('R2', 'R4')
+        self.addLink('R4', 'R5')
+        self.addLink('R5', 'R3')
+        self.addLink('R5', 'R6')
+        self.addLink('R4', 'R3')
+        self.addLink('R2', 'R5')
 
 def parse_hostname(hostname):
     as_num, host_num = hostname.replace('h', '').split('-')
