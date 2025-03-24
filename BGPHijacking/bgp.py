@@ -162,7 +162,7 @@ def main():
         host.cmd("route add default gw %s" % (get_gateway(host.name)))
 
     log("Starting web servers", 'yellow')
-    start_webserver(net, 'h1-1', "Legit web server 2.1.1")
+    start_webserver(net, 'h1-1', "Default web server 2.1.1")
     start_webserver(net, 'h6-1', "*** Attacker web server 2.1.1***")
 
     CLI(net, script=args.scriptfile)
