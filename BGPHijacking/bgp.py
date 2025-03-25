@@ -94,14 +94,15 @@ class SimpleTopo(Topo):
 
         # link the ASs - the demo scenario is a straight line with the attacker directly attached to AS1/R1
         self.addLink('R1', 'R2')
+        self.addLink('R1', 'R3')
         self.addLink('R2', 'R3')
-        self.addLink('R3', 'R1')
         self.addLink('R2', 'R4')
-        self.addLink('R4', 'R5')
-        self.addLink('R5', 'R3')
-        self.addLink('R5', 'R6')
-        self.addLink('R4', 'R3')
         self.addLink('R2', 'R5')
+        self.addLink('R3', 'R4')
+        self.addLink('R3', 'R5')
+        self.addLink('R4', 'R5')
+        self.addLink('R5', 'R6')
+
 
 def parse_hostname(hostname):
     as_num, host_num = hostname.replace('h', '').split('-')
@@ -109,18 +110,18 @@ def parse_hostname(hostname):
 
 def get_ip(hostname):
     as_num, host_num = parse_hostname(hostname)
-    # AS4 is posing as AS3
-    if as_num == 4:
-        as_num = 3
+    # AS6 is posing as AS1
+    if as_num == 6:
+        as_num = 1
     host_ip = f'{10+as_num}.0.{host_num}.1/24'
     return host_ip
 
 
 def get_gateway(hostname):
     as_num, host_num = parse_hostname(hostname)
-    # AS4 is posing as AS3
-    if as_num == 4:
-        as_num = 3
+    # AS6 is posing as AS1
+    if as_num == 6:
+        as_num = 1
     gateway_ip = f'{10+as_num}.0.{host_num}.254'
     return gateway_ip
 
@@ -162,7 +163,7 @@ def main():
         host.cmd("route add default gw %s" % (get_gateway(host.name)))
 
     log("Starting web servers", 'yellow')
-    start_webserver(net, 'h1-1', "Legit web server 2.1.1")
+    start_webserver(net, 'h1-1', "Default web server 2.1.1")
     start_webserver(net, 'h6-1', "*** Attacker web server 2.1.1***")
 
     CLI(net, script=args.scriptfile)
